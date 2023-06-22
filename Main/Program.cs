@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 using CosmosClient client = new(
-    accountEndpoint: Environment.GetEnvironmentVariable("COSMOS_ENDPOINT"),
+    accountEndpoint: builder.Configuration["Cosmos:COSMOS_ENDPOINT"],
     tokenCredential: new DefaultAzureCredential()
 );
 
