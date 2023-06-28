@@ -1,24 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Main.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Azure.Cosmos;
+using Microsoft.EntityFrameworkCore;
 
 namespace Main.Pages;
 
 public class IndexModel : PageModel
 {
+    private readonly PostgresContext _db;
     private readonly ILogger<IndexModel> _logger;
-    private readonly CosmosClient _dbClient;
 
-    public IndexModel(ILogger<IndexModel> logger, CosmosClient dbClient)
+    public IndexModel(ILogger<IndexModel> logger, PostgresContext db)
     {
         _logger = logger;
-        _dbClient = dbClient;
+        _db = db;
     }
 
-    public void OnGetAsync()
+    public int CounterCount { get; set; } // Property to hold the count value
+
+    public async Task OnGetAsync()
     {
-        var dbId = _dbClient.GetDatabase("nick");
-        Console.WriteLine("dbId: " + dbId.Id);
-    }
+        await _db.Database.ExecuteSqlRawAsync("CALL public.IncrementCounter({0})", 1);
 
+        var counter = await _db.Counters.FirstOrDefaultAsync();
+        if (counter != null) CounterCount = counter.Count;
+    }
 }

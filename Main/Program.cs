@@ -1,17 +1,14 @@
-using Azure.Identity;
-using Microsoft.Azure.Cosmos;
+using Main.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-using CosmosClient client = new(
-    accountEndpoint: builder.Configuration["Cosmos:COSMOS_ENDPOINT"],
-    tokenCredential: new DefaultAzureCredential()
-);
-
-builder.Services.AddSingleton<CosmosClient>(client);
+// add postgres
+builder.Services.AddDbContext<PostgresContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
