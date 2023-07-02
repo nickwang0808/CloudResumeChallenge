@@ -82,3 +82,5 @@ override.tf.json
 .terraformrc
 terraform.rc
 .env
+.secrets
+tmp/
