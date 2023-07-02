@@ -67,6 +67,6 @@ resource "azurerm_linux_web_app" "web-app" {
     connection_string {
         name  = "DefaultConnection"
         type  = "Custom"
-        value = "postgresql://${azurerm_postgresql_flexible_server.postgres.administrator_login}:${azurerm_postgresql_flexible_server.postgres.administrator_password}@${azurerm_postgresql_flexible_server.postgres.fqdn}:5432/postgres"
+        value = "Host=${azurerm_postgresql_flexible_server.postgres.fqdn};Port=5432;Database=postgres;Username=${azurerm_postgresql_flexible_server.postgres.administrator_login};Password=${azurerm_postgresql_flexible_server.postgres.administrator_password}"
     }
 }
